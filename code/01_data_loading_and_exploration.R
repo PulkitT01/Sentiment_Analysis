@@ -2,6 +2,8 @@
 library(tidyverse)
 library(tidytext)
 library(ggplot2)
+library(stringr)
+library(tm)
 
 # Import the data
 data<- read.csv("C:/Users/pulki/Documents/R projects/Sentiment_Analysis/data/text.csv")
@@ -35,4 +37,28 @@ ggplot(data, aes(x=emotion)) +
 
 # Now, we need to do some preprocessing to the data. We use tidytext library for this.
 
+clean_text <- function(text) {
+  # making the text lowercase
+  data$text<- tolower(data$text)
+  
+  # removing text in square brackets
+  data$text <- gsub("\\[.*?\\]", "", data$text)
+  
+  # removing links
+  data$text <- gsub("https?://\\S+|www\\.\\S+", "", data$text)
+  
+  # removing punctuation
+  data$text <- gsub("[[:punct:]]", "", data$text)
+  
+  # removing words containing numbers
+  data$text <- gsub("\\w*\\d\\w*", "", data$text)
+  
+  return(data$text)
+  
+}  
 
+# Applying the clean_text() function to the "text" column of the dataset
+data$cleaned_text <- clean_text(data)
+
+# Viewing the head of the dataset with the new cleaned_text column
+head(data)
