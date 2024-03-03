@@ -4,6 +4,8 @@ data1<- read.csv("C:/Users/pulki/Documents/R projects/Sentiment_Analysis/data/pr
 # Load the necessary libraries
 library(text2vec)
 library(caTools)
+library(xgboost)
+library(caret)
 
 # Split the data into features (X) and target (y)
 X <- data1$cleaned_text
@@ -27,33 +29,7 @@ y_test <- y[!split]
 cat("Training set:", dim(X_train), "y_train:", length(y_train), "\n")
 cat("Testing set:", dim(X_test), "y_test:", length(y_test), "\n")
 
-
-# Trying Naive Bayes approach
-
-# # Load the necessary library
-# library(e1071)
-# 
-# # Convert the sparse matrix to a data frame
-# X_train_df <- as.data.frame(as.matrix(X_train))
-# X_test_df <- as.data.frame(as.matrix(X_test))
-# 
-# # Train a Naive Bayes model
-# model <- naiveBayes(X_train_df, y_train)
-# 
-# # Make predictions on the test data
-# predictions <- predict(model, X_test)
-# 
-# # Evaluate the model
-# accuracy <- sum(predictions == y_test) / length(y_test)
-# print(paste("Accuracy:", accuracy))
-# 
-# Data set is too big, and naive bayes is not allowing me to use sparse data.
-
-
 # Let's try xgboost
-
-# Load the necessary library
-library(xgboost)
 
 # Convert the sparse matrix to a format xgboost can handle
 dtrain <- xgb.DMatrix(X_train, label = y_train)
@@ -78,4 +54,30 @@ accuracy <- sum(predictions == y_test) / length(y_test)
 print(paste("Accuracy:", accuracy))
 
 # We get an accuracy of 87.42%, which looks pretty good. 
+
+# Let's try to find the best parameters for this model by trying out a few different ones and comparing them together
+
+# Define the parameter grid
+param_grid <- list(
+  eta = c(0.1, 0.3, 0.5),
+  max_depth = c(3, 6, 9),
+  subsample = c(0.7, 0.8, 0.9),
+  colsample_bytree = c(0.7, 0.8, 0.9)
+)
+
+# Perform grid search
+cv_results <- xgb.cv(
+  params = params,
+  data = dtrain,
+  nfold = 5,
+  nrounds = 100,
+  metrics = "mlogloss",
+  grid = param_grid,
+  verbose = TRUE
+)
+
+# Get the best parameters
+best_params <- cv_results$best_params
+
+# best_params has NULL value
 
