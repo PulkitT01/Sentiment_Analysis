@@ -27,13 +27,18 @@ label_to_emotion<- c("sadness", "joy", "love", "anger", "fear", "surprise")
 data$emotion<- label_to_emotion[data$label+1]
 
 # Plotting the histogram of emotions
-ggplot(data, aes(x=emotion)) +
+plot <- ggplot(data, aes(x=emotion)) +
   geom_histogram(stat="count") +
   xlab("Emotion") +
   ylab("Count") +
   ggtitle("Histogram of Emotions") +
   theme_minimal() +
-  theme(plot.title = element_text(hjust = 0.5))  # This line centers the title
+  theme(plot.title = element_text(hjust = 0.5, color = "black"), 
+        plot.background = element_rect(fill = "white"))  
+
+# Saving this plot in figures folder
+ggsave("C:/Users/pulki/Documents/R projects/Sentiment_Analysis/figures/histogram_emotions.png", plot, width = 8, height = 6, units = "in")
+
 
 # # Now, we need to do some preprocessing to the data. We use tidytext library for this.
 # 
