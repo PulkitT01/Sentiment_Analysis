@@ -35,30 +35,62 @@ ggplot(data, aes(x=emotion)) +
   theme_minimal() +
   theme(plot.title = element_text(hjust = 0.5))  # This line centers the title
 
-# Now, we need to do some preprocessing to the data. We use tidytext library for this.
+# # Now, we need to do some preprocessing to the data. We use tidytext library for this.
+# 
+# clean_text <- function(text) {
+#   # making the text lowercase
+#   data$text<- tolower(data$text)
+#   
+#   # removing text in square brackets
+#   data$text <- gsub("\\[.*?\\]", "", data$text)
+#   
+#   # removing links
+#   data$text <- gsub("https?://\\S+|www\\.\\S+", "", data$text)
+#   
+#   # removing punctuation
+#   data$text <- gsub("[[:punct:]]", "", data$text)
+#   
+#   # removing words containing numbers
+#   data$text <- gsub("\\w*\\d\\w*", "", data$text)
+#   
+#   return(data$text)
+#   
+# }  
+# 
+# # Applying the clean_text() function to the "text" column of the dataset
+# data$cleaned_text <- clean_text(data)
+# 
+# # Viewing the head of the dataset with the new cleaned_text column
+# head(data)
+# 
+# # Remove words like "and", "the" etc that do not contain much meaning
 
-clean_text <- function(text) {
-  # making the text lowercase
-  data$text<- tolower(data$text)
-  
-  # removing text in square brackets
-  data$text <- gsub("\\[.*?\\]", "", data$text)
-  
-  # removing links
-  data$text <- gsub("https?://\\S+|www\\.\\S+", "", data$text)
-  
-  # removing punctuation
-  data$text <- gsub("[[:punct:]]", "", data$text)
-  
-  # removing words containing numbers
-  data$text <- gsub("\\w*\\d\\w*", "", data$text)
-  
-  return(data$text)
-  
-}  
 
-# Applying the clean_text() function to the "text" column of the dataset
-data$cleaned_text <- clean_text(data)
+#Let's do some pre-processing to the data
 
-# Viewing the head of the dataset with the new cleaned_text column
+# Create a Corpus
+corpus <- Corpus(VectorSource(data$text))
+
+# Convert text to lowercase
+corpus <- tm_map(corpus, tolower)
+
+# Remove punctuation
+corpus <- tm_map(corpus, removePunctuation)
+
+# Remove numbers
+corpus <- tm_map(corpus, removeNumbers)
+
+# Remove stopwords from the corpus
+corpus <- tm_map(corpus, removeWords, stopwords("english"))
+
+# Apply stemming transformation to the corpus
+corpus <- tm_map(corpus, stemDocument)
+
+# Convert the corpus back to a character vector
+cleaned_text <- sapply(corpus, as.character)
+
+# Adding the cleaned_text back to the original dataframe
+data$cleaned_text <- cleaned_text
+
+# View the head of the dataframe with the new cleaned_text column
 head(data)
