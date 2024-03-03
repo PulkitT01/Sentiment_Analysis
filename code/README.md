@@ -12,7 +12,7 @@ The purpose of this script is to:
 - Explore the dataset by viewing its structure, summary statistics, and label distribution.
 - Plot a histogram of emotions to visualize the distribution of sentiment labels.
 - Preprocess the text data by converting it to lowercase, removing punctuation, numbers, stopwords, and applying stemming.
-- Save the pre-processed data to a CSV file!
+- Save the pre-processed data to a CSV file.
 
 ### Usage:
 To use this script:
