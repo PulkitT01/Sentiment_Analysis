@@ -71,20 +71,27 @@ ggplot(data, aes(x=emotion)) +
 # Create a Corpus
 corpus <- Corpus(VectorSource(data$text))
 
-# Convert text to lowercase
-corpus <- tm_map(corpus, tolower)
+preprocesstext <- function(corpus){
+  # Convert text to lowercase
+  corpus <- tm_map(corpus, tolower)
+  
+  # Remove punctuation
+  corpus <- tm_map(corpus, removePunctuation)
+  
+  # Remove numbers
+  corpus <- tm_map(corpus, removeNumbers)
+  
+  # Remove stopwords from the corpus
+  corpus <- tm_map(corpus, removeWords, stopwords("english"))
+  
+  # Apply stemming transformation to the corpus
+  corpus <- tm_map(corpus, stemDocument)
+  
+  return(corpus)
+}
 
-# Remove punctuation
-corpus <- tm_map(corpus, removePunctuation)
-
-# Remove numbers
-corpus <- tm_map(corpus, removeNumbers)
-
-# Remove stopwords from the corpus
-corpus <- tm_map(corpus, removeWords, stopwords("english"))
-
-# Apply stemming transformation to the corpus
-corpus <- tm_map(corpus, stemDocument)
+# Pre-process the text
+corpus <- preprocesstext(corpus)
 
 # Convert the corpus back to a character vector
 cleaned_text <- sapply(corpus, as.character)
@@ -92,5 +99,6 @@ cleaned_text <- sapply(corpus, as.character)
 # Adding the cleaned_text back to the original dataframe
 data$cleaned_text <- cleaned_text
 
-# View the head of the dataframe with the new cleaned_text column
+# View the head of the data frame with the new cleaned_text column
 head(data)
+
