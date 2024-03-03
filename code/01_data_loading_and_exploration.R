@@ -102,3 +102,5 @@ data$cleaned_text <- cleaned_text
 # View the head of the data frame with the new cleaned_text column
 head(data)
 
+# Save the preprocessed data to a CSV file
+write.csv(data, file = "C:/Users/pulki/Documents/R projects/Sentiment_Analysis/data/preprocessed_data.csv", row.names = FALSE)
