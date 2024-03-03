@@ -29,6 +29,8 @@ To use this script:
 - Save Preprocessed Data: Save the preprocessed data to a CSV file.
 
 
+
+
 ## 02_preparation_and_machine_learning.R
 
 This code file, "02_preparation_and_machine_learning.R", contains R code for preparing the pre-processed data and training a machine learning model for sentiment analysis. Below is a summary of the tasks performed in this code:
