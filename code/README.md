@@ -28,6 +28,12 @@ To use this script:
 - Pre-processing: Perform text preprocessing by converting text to lowercase, removing punctuation, numbers, stopwords, and applying stemming.
 - Save Preprocessed Data: Save the preprocessed data to a CSV file.
 
+### Additional Functionality and Insights:
+- **Variable Scoping and Environments**: The script demonstrates the concept of variable scoping and environments in R. It illustrates how variables created within a function are encapsulated within their own environment, distinct from the global environment. This is exemplified by the creation of an unnecessary variable within the `preprocesstext` function and the observation of different contents and memory addresses for variables inside and outside the function.
+
+- **Benchmarking Performance**: A benchmarking comparison between `sapply` and `lapply` functions is conducted to assess the efficiency of different approaches in converting the corpus to a character vector. This benchmarking provides insights into the relative performance of these functions, aiding in optimization and code efficiency.
+
+- **Detailed ReadME Updates**: The README file now includes detailed instructions for usage, including updating file paths and running the script in an R environment. Additionally, it outlines the contents of the script and its purpose, providing comprehensive guidance for users.
 
 
 
