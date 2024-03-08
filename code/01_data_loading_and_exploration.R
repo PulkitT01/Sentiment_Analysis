@@ -1,4 +1,5 @@
 # Load necessary libraries
+library(microbenchmark)
 library(tidyverse)
 library(tidytext)
 library(ggplot2)
@@ -75,6 +76,32 @@ corpus <- preprocesstext(corpus)
 
 # Convert the corpus back to a character vector
 cleaned_text <- sapply(corpus, as.character)
+
+
+# Let's see if there's a difference in efficiency if the same task is done by using lapply instead of sapply
+
+# Define the functions to be benchmarked
+f_sapply <- function(corpus) {
+  sapply(corpus, as.character)
+}
+
+f_lapply <- function(corpus) {
+  unlist(lapply(corpus, as.character))
+}
+
+# Perform the benchmarking
+bench <- microbenchmark(
+  sapply = f_sapply(corpus),
+  lapply = f_lapply(corpus),
+  times = 100
+)
+
+# Plot the results
+autoplot(bench)
+
+# Save the benchmark plot
+ggsave("C:/Users/pulki/Documents/R projects/Sentiment_Analysis/figures/benchmark_plot.png", autoplot(bench), width = 8, height = 6, units = "in")
+
 
 # Adding the cleaned_text back to the original dataframe
 data$cleaned_text <- cleaned_text
