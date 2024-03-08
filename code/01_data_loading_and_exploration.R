@@ -5,6 +5,12 @@ library(ggplot2)
 library(stringr)
 library(tm)
 
+# Use searchpaths() to see all the currently loaded packages
+searchpaths()
+
+# The output of `searchpaths()` reveals all paths searched by R to locate functions and data. It includes explicitly loaded libraries, implicit dependencies, system directories, autoloads, and RStudio tools, ensuring accessibility of required resources.
+
+
 # Import the data
 data<- read.csv("C:/Users/pulki/Documents/R projects/Sentiment_Analysis/data/text.csv")
 
@@ -40,7 +46,7 @@ plot <- ggplot(data, aes(x=emotion)) +
 ggsave("C:/Users/pulki/Documents/R projects/Sentiment_Analysis/figures/histogram_emotions.png", plot, width = 8, height = 6, units = "in")
 
 
-#Let's do some pre-processing to the data
+# Let's do some pre-processing to the data
 
 # Create a Corpus
 corpus <- Corpus(VectorSource(data$text))
