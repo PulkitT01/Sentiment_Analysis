@@ -43,7 +43,7 @@ head(data)
 ```
 
 ## Load the necessary libraries
-```{r load_libraries, echo=FALSE}
+```{r load_libraries, echo=TRUE, message=FALSE}
 library(microbenchmark)
 library(tidyverse)
 library(tidytext)
@@ -139,7 +139,7 @@ preprocesstext <- function(corpus){
 
 
 ### Call the function and save the outputs
-```{r function_call, echo=TRUE}
+```{r function_call, echo=TRUE, message=FALSE}
 output <- preprocesstext(corpus_outside)
 corpus <- output$corpus
 env_inside <- output$env_inside
