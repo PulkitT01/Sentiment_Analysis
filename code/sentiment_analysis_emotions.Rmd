@@ -7,7 +7,7 @@ output: html_document
 
 ---
 title: Sentiment Analysis on Emotions Dataset
-author: Your Name
+author: Pulkit Thukral
 date: \today
 output:
   html_document:
@@ -43,7 +43,7 @@ head(data)
 ```
 
 ## Load the necessary libraries
-```{r load_libraries, echo=TRUE, message=FALSE}
+```{r load_libraries, echo=TRUE, warning=FALSE, message=FALSE}
 library(microbenchmark)
 library(tidyverse)
 library(tidytext)
@@ -139,7 +139,7 @@ preprocesstext <- function(corpus){
 
 
 ### Call the function and save the outputs
-```{r function_call, echo=TRUE, message=FALSE}
+```{r function_call, echo=TRUE, warning=FALSE, message=FALSE}
 output <- preprocesstext(corpus_outside)
 corpus <- output$corpus
 env_inside <- output$env_inside
@@ -220,4 +220,6 @@ The graph compares the performance of *lapply* and *sapply* in R programming ove
 This leads me to infer that for this specific task, there isn't a significant difference in performance between *lapply* and *sapply*. Therefore, I would conclude that the choice between these two functions can be made based on other factors such as code readability or the structure of the output, rather than performance. 
 
 However, I would like to note that this is a specific case, and performance may vary depending on the nature of the task and the data being processed. It's always a good practice to benchmark your own code when performance is a critical factor.
+
+
 
