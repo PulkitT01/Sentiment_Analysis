@@ -30,20 +30,9 @@ Each entry in this dataset consists of a text segment representing a Twitter mes
 - **text**: A string feature representing the content of the Twitter message.
 - **label**: A classification label indicating the primary emotion, with values ranging from 0 to 5.
 
-## Sample Data
-
-Here's a glimpse of the dataset with a few examples:
-
-```{r sample_data, echo=FALSE}
-# Import the data
-data<- read.csv("C:/Users/pulki/Documents/R projects/Sentiment_Analysis/data/text.csv")
-
-# View the first few rows to see what the data is like
-head(data)
-```
-
 ## Load the necessary libraries
 ```{r load_libraries, echo=TRUE, warning=FALSE, message=FALSE}
+library(knitr)
 library(microbenchmark)
 library(tidyverse)
 library(tidytext)
@@ -54,6 +43,58 @@ library(text2vec)
 library(caTools)
 library(xgboost)
 library(caret)
+```
+
+### Instances where the libraries are used:
+
+**knitr**:
+- Used for printing data using `kable()`.
+
+**microbenchmark**:
+- Used for benchmarking `sapply()` and `lapply()` functions.
+
+**tidyverse**:
+- Used for data manipulation and visualization.
+- Specifically, functions from the `ggplot2` package were used for plotting histograms and creating visualizations.
+
+**tidytext**:
+- Used for text preprocessing tasks.
+- Functions like `unnest_tokens()` and `count()` are commonly used for tokenizing and counting words in text data.
+
+**ggplot2**:
+- Used for creating visualizations, such as histograms.
+
+**stringr**:
+- Used for string manipulation tasks.
+- Functions like `str_replace()` are commonly used for replacing patterns in strings.
+
+**tm**:
+- Used for text mining tasks.
+- Functions like `Corpus()` and `tm_map()` are used for creating a corpus and performing text preprocessing tasks.
+
+**text2vec**:
+- Used for converting text data into numerical vectors.
+- Functions like `itoken()`, `create_vocabulary()`, and `create_dtm()` are used for text vectorization.
+
+**caTools**:
+- Used for data splitting.
+- Specifically, the `sample.split()` function is used for splitting data into training and testing sets.
+
+**xgboost**:
+- Used for building and training the XGBoost model.
+- Functions like `xgb.train()` and `xgb.DMatrix()` are used for model training and prediction.
+
+
+## Sample Data
+
+Here's a glimpse of the dataset with a few examples:
+
+```{r sample_data, echo=FALSE}
+# Import the data
+data<- read.csv("C:/Users/pulki/Documents/R projects/Sentiment_Analysis/data/text.csv")
+
+# Print the data using kable()
+kable(head(data), format = "markdown", row.names = FALSE)
 ```
 
 ### Use searchpaths() to see all the currently loaded packages
@@ -105,7 +146,7 @@ ggsave("C:/Users/pulki/Documents/R projects/Sentiment_Analysis/figures/histogram
 ```
 
 
-## Preprocessing to the data
+## Text data preprocessing pipeline
 
 ### Create a corpus
 ```{r corpus, echo=TRUE}
@@ -149,6 +190,20 @@ corpus <- output$corpus
 env_inside <- output$env_inside
 ```
 
+### Data after preprocessing
+```{r cleaned_text, echo=FALSE}
+cleaned_text <- sapply(corpus, as.character)
+
+# Adding the cleaned_text back to the original dataframe
+data$cleaned_text <- cleaned_text
+
+# View the head of the data frame with the new cleaned_text column
+kable(head(data), format = "markdown", row.names = FALSE)
+
+# Save the preprocessed data to a CSV file
+write.csv(data, file = "C:/Users/pulki/Documents/R projects/Sentiment_Analysis/data/preprocessed_data.csv", row.names = FALSE)
+```
+
 ### Checking environments inside and outside the function
 ```{r environments, echo=FALSE}
 print("Contents of the environment outside the function:")
@@ -173,24 +228,6 @@ cat("Memory address of corpus inside the function:", tracemem(corpus_inside), "\
 ```
 
 The memory addresses for corpus_outside and corpus_inside differ because each variable exists within its respective scope. Variables declared outside the function (corpus_outside) and those created within it (corpus_inside) occupy distinct memory locations due to the scoping rules in R. As a result, changes made to corpus_inside within the function do not affect corpus_outside outside the function's scope. This encapsulation principle ensures that modifications made within a function remain isolated, reflecting the notion: "What happens in the function stays in the function."
-
-
-### Convert corpus back to character vector
-```{r cleaned_text, echo=FALSE}
-cleaned_text <- sapply(corpus, as.character)
-
-# Adding the cleaned_text back to the original dataframe
-data$cleaned_text <- cleaned_text
-
-# View the head of the data frame with the new cleaned_text column
-head(data)
-```
-
-```{r saving_file, echo=FALSE}
-# Save the preprocessed data to a CSV file
-write.csv(data, file = "C:/Users/pulki/Documents/R projects/Sentiment_Analysis/data/preprocessed_data.csv", row.names = FALSE)
-```
-
 
 ### Benchmark sapply() and lapply()
 ```{r benchmark, echo=FALSE}
@@ -228,6 +265,7 @@ However, I would like to note that this is a specific case, and performance may 
 
 # Machine Learning with XGBoost
 
+### Loading Preprocessed Data
 ```{r, echo=FALSE}
 data1<- read.csv("C:/Users/pulki/Documents/R projects/Sentiment_Analysis/data/preprocessed_data.csv")
 ```
