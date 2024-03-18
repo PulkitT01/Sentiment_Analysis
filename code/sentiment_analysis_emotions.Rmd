@@ -3,8 +3,11 @@ title: "Sentiment Analysis"
 author: "Pulkit"
 date: "2024-03-14"
 output:
-  cleanrmd::html_document_clean:
-    theme: water
+  html_document:
+    theme: united
+    toc: true
+    toc_float: true
+    code_folding: hide
 ---
 
 
@@ -19,12 +22,12 @@ Welcome to the "Emotions" dataset – a collection of English Twitter messages m
 
 Each entry in this dataset consists of a text segment representing a Twitter message and a corresponding label indicating the predominant emotion conveyed. The emotions are classified into six categories: sadness (0), joy (1), love (2), anger (3), fear (4), and surprise (5). Whether you're interested in sentiment analysis, emotion classification, or text mining, this dataset provides a rich foundation for exploring the nuanced emotional landscape within the realm of social media.
 
-## Key Features
+*Key Features*
 
 - **text**: A string feature representing the content of the Twitter message.
 - **label**: A classification label indicating the primary emotion, with values ranging from 0 to 5.
 
-## Load the necessary libraries
+**Loading the necessary libraries**
 ```{r load_libraries, warning=FALSE, message=FALSE}
 library(knitr)
 library(microbenchmark)
@@ -39,7 +42,7 @@ library(xgboost)
 library(caret)
 ```
 
-### Instances where the libraries are used:
+**Instances where the libraries are used:**
 
 **knitr**:
 - Used for printing data using `kable()`.
@@ -78,6 +81,8 @@ library(caret)
 - Used for building and training the XGBoost model.
 - Functions like `xgb.train()` and `xgb.DMatrix()` are used for model training and prediction.
 
+**caret**:
+- Used for making the confusion matrix with `confusionMatrix()`
 
 ## Sample Data
 
@@ -91,7 +96,7 @@ data<- read.csv("C:/Users/pulki/Documents/R projects/Sentiment_Analysis/data/tex
 kable(head(data), format = "markdown", row.names = FALSE)
 ```
 
-### Use searchpaths() to see all the currently loaded packages
+**Using searchpaths() to see all the currently loaded packages**
 ```{r searchpaths}
 searchpaths()
 ```
@@ -104,17 +109,17 @@ The output of `searchpaths()` reveals all paths searched by R to locate function
 summary(data)
 ```
 
-### Check for missing values
+**Checking for missing values**
 ```{r missing_values}
 sum(is.na(data))
 ```
 
-## Distribution of labels in the data:
+### Distribution of labels in the data:
 ```{r}
 table(data$label)
 ```
 
-```{r labels_distribution}
+```{r labels_distribution, warning=FALSE, message=FALSE}
 # Defining a mapping from labels to emotions
 label_to_emotion<- c("sadness", "joy", "love", "anger", "fear", "surprise")
 
@@ -138,12 +143,12 @@ ggsave("C:/Users/pulki/Documents/R projects/Sentiment_Analysis/figures/histogram
 
 ## Text data preprocessing pipeline
 
-### Create a corpus
+**Creating a corpus**
 ```{r corpus}
 corpus_outside <- Corpus(VectorSource(data$text))
 ```
 
-### Function to do the preprocessing
+**Function to do the pre-processing**
 ```{r preprocessing}
 preprocesstext <- function(corpus){
   # Unnecessary variable created inside the function
@@ -173,14 +178,14 @@ preprocesstext <- function(corpus){
 ```
 
 
-### Call the function and save the outputs
+**Calling the function and saving the outputs**
 ```{r function_call, warning=FALSE, message=FALSE}
 output <- preprocesstext(corpus_outside)
 corpus <- output$corpus
 env_inside <- output$env_inside
 ```
 
-### Data after preprocessing
+### Data after pre-processing
 ```{r cleaned_text}
 cleaned_text <- sapply(corpus, as.character)
 
@@ -194,7 +199,7 @@ kable(head(data), format = "markdown", row.names = FALSE)
 write.csv(data, file = "C:/Users/pulki/Documents/R projects/Sentiment_Analysis/data/preprocessed_data.csv", row.names = FALSE)
 ```
 
-### Checking environments inside and outside the function
+**Checking environments inside and outside the function**
 ```{r environments}
 print("Contents of the environment outside the function:")
 print(ls(envir = environment()))
@@ -208,7 +213,7 @@ When printing the contents of the environment outside the function, I observe a 
 When inspecting the environment inside the function, I notice fewer variables compared to the global environment. This environment includes "corpus", "env_inside", and an additional variable named "unnecessary_var". This variable was created within the function but is not needed outside, demonstrating the scoping and encapsulation of variables within functions.
 
 
-### Checking memory address of corpus inside and outside the function
+**Checking memory address of corpus inside and outside the function**
 ```{r corpus_memory}
 corpus_inside <- corpus
 
@@ -219,7 +224,7 @@ cat("Memory address of corpus inside the function:", tracemem(corpus_inside), "\
 
 The memory addresses for corpus_outside and corpus_inside differ because each variable exists within its respective scope. Variables declared outside the function (corpus_outside) and those created within it (corpus_inside) occupy distinct memory locations due to the scoping rules in R. As a result, changes made to corpus_inside within the function do not affect corpus_outside outside the function's scope. This encapsulation principle ensures that modifications made within a function remain isolated, reflecting the notion: "What happens in the function stays in the function."
 
-### Benchmark sapply() and lapply()
+### Benchmarking sapply() and lapply()
 ```{r benchmark}
 # Define the functions to be benchmarked
 f_sapply <- function(corpus) {
@@ -255,18 +260,18 @@ However, I would like to note that this is a specific case, and performance may 
 
 # Machine Learning with XGBoost
 
-### Loading Preprocessed Data
+**Loading Preprocessed Data**
 ```{r}
 data1<- read.csv("C:/Users/pulki/Documents/R projects/Sentiment_Analysis/data/preprocessed_data.csv")
 ```
 
-### Split the data into features (X) and target (y)
+**Splitting the data into features (X) and target (y)**
 ```{r}
 X <- data1$cleaned_text
 y <- data1$label
 ```
 
-### Convert the text data into numerical vectors
+**Converting the text data into numerical vectors**
 ```{r text_to_numeric}
 it <- itoken(X, progressbar = FALSE)
 v <- create_vocabulary(it)
@@ -274,7 +279,7 @@ vectorizer <- vocab_vectorizer(v)
 dtm <- create_dtm(it, vectorizer)
 ```
 
-### Split the data into training and testing sets
+**Splitting the data into training and testing sets**
 ```{r, data_split}
 set.seed(123)
 split <- sample.split(y, SplitRatio = 0.8)
@@ -284,20 +289,20 @@ X_test <- dtm[!split, ]
 y_test <- y[!split]
 ```
 
-### Size of training and test sets
+**Size of training and test sets**
 ```{r}
 cat("Training set:", dim(X_train), ", y_train:", length(y_train), "\n")
 cat("Testing set:", dim(X_test), ", y_test:", length(y_test), "\n")
 ```
 ## XGBoost Model Training and Evaluation
 
-### Convert the sparse matrix to a format xgboost can handle
+**Convert the sparse matrix to a format xgboost can handle**
 ```{r}
 dtrain <- xgb.DMatrix(X_train, label = y_train)
 dtest <- xgb.DMatrix(X_test, label = y_test)
 ```
 
-### Set parameters for the xgboost model
+**Set parameters for the xgboost model**
 ```{r}
 params <- list(
   objective = "multi:softmax",
@@ -307,7 +312,7 @@ params <- list(
 )
 ```
 
-### Model training
+**Model training**
 ```{r xgboost_train}
 model <- xgb.train(params, dtrain, nrounds = 100)
 
@@ -325,7 +330,7 @@ We get an accuracy of 87.42%, which looks pretty good.
 
 ## Individual Emotion Prediction Accuracy Analysis
 
-### Convert the predictions and actual values to factors
+**Converting the predictions and actual values to factors**
 ```{r}
 predictions_factor <- as.factor(predictions)
 y_test_factor <- as.factor(y_test)
