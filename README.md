@@ -38,7 +38,7 @@ The sentiment analysis model achieved an overall accuracy of 87.42% on the test 
 
 For detailed analysis and results, refer to the project documentation and generated visualizations.
 
-## Contributors
+## Contributor
 
 - [Pulkit](https://github.com/PulkitT01)
 
