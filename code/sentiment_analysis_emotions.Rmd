@@ -387,5 +387,3 @@ From the confusion matrix and the statistics, we can infer the following:
 **Balanced Accuracy:** The balanced accuracy for each class is quite high (ranging from *87.07%* to *95.09%*), indicating that the model performs well across all classes, not just the majority class.
 
 **F1-score:** The F1-score, which is the harmonic mean of precision and recall, gives us a single metric to evaluate the model. The F1-scores for the different classes range from *75.98%* (*love*) to *91.39%* (*sadness*), indicating that the model performs best for *sadness* and worst for *love*.
-
-
