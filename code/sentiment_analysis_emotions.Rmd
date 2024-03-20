@@ -4,10 +4,12 @@ author: "Pulkit Thukral"
 output:
   html_document:
     theme: united
-    toc: true
-    toc_float: true
+    toc: yes
+    toc_float: yes
     code_folding: hide
-    code_download: true
+    code_download: yes
+  pdf_document:
+    toc: yes
 ---
 
 
@@ -101,7 +103,7 @@ Here's a glimpse of the dataset with a few examples:
 
 ```{r sample_data}
 # Import the data
-data<- read.csv("C:/Users/pulki/Documents/R projects/Sentiment_Analysis/data/text.csv")
+data <- read.csv("https://raw.githubusercontent.com/PulkitT01/Sentiment_Analysis/main/data/text.csv")
 
 # Print the data using kable()
 kable(head(data), format = "markdown", row.names = FALSE)
@@ -273,7 +275,7 @@ However, I would like to note that this is a specific case, and performance may 
 
 **Loading Preprocessed Data**
 ```{r}
-data1<- read.csv("C:/Users/pulki/Documents/R projects/Sentiment_Analysis/data/preprocessed_data.csv")
+data1<- read.csv("https://raw.githubusercontent.com/PulkitT01/Sentiment_Analysis/main/data/preprocessed_data.csv")
 ```
 
 **Splitting the data into features (X) and target (y)**
