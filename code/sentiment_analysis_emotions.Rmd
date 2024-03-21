@@ -349,7 +349,7 @@ predictions_factor <- as.factor(predictions)
 y_test_factor <- as.factor(y_test)
 ```
 
-### Confusion matrix
+**Confusion matrix**
 ```{r confusion_matrix}
 cm <- confusionMatrix(predictions_factor, y_test_factor)
 
@@ -374,6 +374,7 @@ From the confusion matrix and the statistics, we can infer the following:
 **Overall Accuracy:** The overall accuracy of the model is *87.42%*, which means the model correctly predicted the emotion *87.42%* of the time.
 
 **Class-wise Performance:**
+
 1. **Sadness (0):** The model has a high precision (*92.11%*) and recall (*90.69%*) for predicting *sadness*, indicating that it is performing well for this class.
 
 2. **Joy (1):** The model also performs well in predicting *joy* with a precision of *89.06%* and recall of *89.72%*.
