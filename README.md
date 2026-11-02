@@ -1,5 +1,7 @@
 # Sentiment Analysis Project
 
+**[View the full project report](https://pulkitt01.github.io/Sentiment_Analysis/)**
+
 ## Introduction
 
 Welcome to the Sentiment Analysis project! In this project, we explore the "Emotions" dataset – a collection of English Twitter messages annotated with six fundamental emotions: anger, fear, joy, love, sadness, and surprise. Through this project, we aim to build a sentiment analysis model to predict the predominant emotion conveyed in short-form text on social media.
